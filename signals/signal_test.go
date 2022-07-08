@@ -13,6 +13,7 @@ func TestSetupSignalHandler(t *testing.T) {
 
 	var (
 		done int32
+		wait chan struct{}
 	)
 
 	go func(ctx context.Context) {
@@ -23,8 +24,9 @@ func TestSetupSignalHandler(t *testing.T) {
 				t.Log("done")
 				atomic.StoreInt32(&done, 1)
 				return
-			case <-time.After(time.Second * 10):
-				t.Log("timeout")
+			case <-wait:
+				t.Log("wait")
+
 			}
 		}
 
